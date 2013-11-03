@@ -6,20 +6,21 @@ import sys
 from tumblr import TumblrClient
 
 
-def lister(client, count, params={}):
+def lister(client, params={}):
 	client.get_blog_posts()
 
 	total = 0
 	while True:
 		time.sleep(1)
-		print "# REQUEST " + str(total)
 		params['offset'] = total
 		json_response = client.get_blog_posts(request_params=params)
+		total_posts = json_response['response']['blog']['posts']
+		print "# REQUEST " + str(total) + " OF " + str(total_posts)
 		for post in json_response['response']['posts']:
 			total += 1
-			if total > count:
-				raise StopIteration
 			yield post
+		if total >= total_posts:
+			raise SystemExit
 
 
 def main():
@@ -52,12 +53,13 @@ def main():
 	}
 
 	client = TumblrClient(hostname, consumer, token)
-	for post in lister(client, 27000, params):
+	for post in lister(client, params):
 		if (not 'source_title' in post) or (post['source_title'] == subdomain):
 			eval(post['type']).write(post['post_url'] + '\n')
 			print post['type'] + '\t' + post['post_url']
 			if (post['type'] == 'photo'):
-				bigphoto.write(post['photos'][0]['original_size']['url'] + '\n')
+				for onephoto in post['photos']:
+					bigphoto.write(onephoto['original_size']['url'] + '\n')
 
 
 if __name__ == '__main__':
