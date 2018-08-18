@@ -39,8 +39,8 @@ def main():
 
 	hostname = subdomain + '.tumblr.com'
 
-	consumer_key = 'Mri3sRuQiYcsM0PdemF92w4oJT6MY6MEhGxfoxADHvu8cXzJi8'
-	consumer_secret = 'eDsK30RRKgP7gdbeGcwfIOe0v4sc7AgkKByITaKlThy85I9IjX'
+	consumer_key = ''
+	consumer_secret = ''
 
 	access_key = 'ACCESS_KEY'
 	access_secret = 'ACCESS_KEY'
